@@ -27,10 +27,10 @@ L.control.layers({
     }).addTo(map)
 
 },{
-    "Sehenswürdigkeiten" : L.featureGroup().addTo(map),
-    "Vienna sightseeing Linien" : L.featureGroup().addTo(map),
-    "Vienna sightseeing Haltestellen" : L.featureGroup().addTo(map),
-    "Fußgängerzonen" : L.featureGroup().addTo(map),
+    "Sehenswürdigkeiten" : Overlays.sights,
+    "Vienna sightseeing Linien" : Overlays.lines,
+    "Vienna sightseeing Haltestellen" : Overlays.stops,
+    "Fußgängerzonen" : Overlays.zones,
 
 }).addTo(map);
 
