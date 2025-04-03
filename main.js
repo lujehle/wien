@@ -13,46 +13,46 @@ let map = L.map("map").setView([stephansdom.lat, stephansdom.lng], stephansdom.z
 
 //Overlays definieren
 let Overlays = {
-    sights : L.featureGroup().addTo(map),
-    lines : L.featureGroup().addTo(map),
-    stops : L.featureGroup().addTo(map),
-    zones : L.featureGroup().addTo(map),
+    sights: L.featureGroup().addTo(map),
+    lines: L.featureGroup().addTo(map),
+    stops: L.featureGroup().addTo(map),
+    zones: L.featureGroup().addTo(map),
 }
 
 //Layercontrol
 L.control.layers({
-    "BasemapAT" : L.tileLayer.provider('BasemapAT.basemap').addTo(map),
-    "BasemapAT grau" : L.tileLayer.provider('BasemapAT.grau').addTo(map),
-    "BasemapAT Overlay" : L.tileLayer.provider('BasemapAT.overlay').addTo(map),
-    "BasemapAT Terrain" : L.tileLayer.provider('BasemapAT.terrain').addTo(map),
-    "BasemapAT Surface" : L.tileLayer.provider('BasemapAT.surface').addTo(map),
-    "BasemapAT highdpi" : L.tileLayer.provider('BasemapAT.highdpi').addTo(map),
-    "BasemapAT Orthofoto" : L.tileLayer.provider('BasemapAT.orthofoto').addTo(map),
-    
+    "BasemapAT": L.tileLayer.provider('BasemapAT.basemap').addTo(map),
+    "BasemapAT grau": L.tileLayer.provider('BasemapAT.grau').addTo(map),
+    "BasemapAT Overlay": L.tileLayer.provider('BasemapAT.overlay').addTo(map),
+    "BasemapAT Terrain": L.tileLayer.provider('BasemapAT.terrain').addTo(map),
+    "BasemapAT Surface": L.tileLayer.provider('BasemapAT.surface').addTo(map),
+    "BasemapAT highdpi": L.tileLayer.provider('BasemapAT.highdpi').addTo(map),
+    "BasemapAT Orthofoto": L.tileLayer.provider('BasemapAT.orthofoto').addTo(map),
 
 
-},{
-    "Sehenswürdigkeiten" : Overlays.sights,
-    "Vienna sightseeing Linien" : Overlays.lines,
-    "Vienna sightseeing Haltestellen" : Overlays.stops,
-    "Fußgängerzonen" : Overlays.zones,
+
+}, {
+    "Sehenswürdigkeiten": Overlays.sights,
+    "Vienna sightseeing Linien": Overlays.lines,
+    "Vienna sightseeing Haltestellen": Overlays.stops,
+    "Fußgängerzonen": Overlays.zones,
 
 }).addTo(map);
 
 //Maßstab
 L.control.scale({
-    imperial : false
+    imperial: false
 }).addTo(map);
 
 //Sehenswürdigkeiten Standorte Wien
 async function loadSights(url) {
     console.log(url);
-    let response = await fetch(url); 
+    let response = await fetch(url);
     let jsondata = await response.json();
     //console.log(jsondata);
     L.geoJSON(jsondata, {
         attribution: "Datenquelle: <a href = 'https://data.wien.gv.at'> Stadt Wien</a>"
-}).addTo(Overlays.sights);
+    }).addTo(Overlays.sights);
 }
 
 
@@ -60,36 +60,36 @@ async function loadSights(url) {
 //Touristische Kraftfahrlinien Liniennetz Vienna Sightseeing Linie Wien
 async function loadLines(url) {
     console.log(url);
-    let response = await fetch(url); 
+    let response = await fetch(url);
     let jsondata = await response.json();
     //console.log(jsondata);
     L.geoJSON(jsondata, {
         attribution: "Datenquelle: <a href = 'https://data.wien.gv.at'> Stadt Wien</a>"
-}).addTo(Overlays.lines);
+    }).addTo(Overlays.lines);
 }
 
 
 //Touristische Kraftfahrlinien Haltestellen Vienna Sightseeing Linie Standorte Wien
 async function loadStops(url) {
     console.log(url);
-    let response = await fetch(url); 
+    let response = await fetch(url);
     let jsondata = await response.json();
     //console.log(jsondata);
     L.geoJSON(jsondata, {
         attribution: "Datenquelle: <a href = 'https://data.wien.gv.at'> Stadt Wien</a>"
-}).addTo(Overlays.stops);
+    }).addTo(Overlays.stops);
 }
 
 
 //Fußgängerzonen Wien
 async function loadZones(url) {
     console.log(url);
-    let response = await fetch(url); 
+    let response = await fetch(url);
     let jsondata = await response.json();
     //console.log(jsondata);
     L.geoJSON(jsondata, {
         attribution: "Datenquelle: <a href = 'https://data.wien.gv.at'> Stadt Wien</a>"
-}).addTo(Overlays.zones);
+    }).addTo(Overlays.zones);
 }
 
 //GeoJSON laden und visualisiere
