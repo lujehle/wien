@@ -102,7 +102,7 @@ async function loadHotels(url) {
     //console.log(jsondata);
     L.geoJSON(jsondata, {
         attribution: "Datenquelle: <a href = 'https://data.wien.gv.at'> Stadt Wien</a>"
-    }).addTo(Overlays.zones);
+    }).addTo(Overlays.hotels);
 }
 //GeoJSON laden und visualisiere
 loadZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json")
