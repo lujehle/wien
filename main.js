@@ -17,6 +17,7 @@ let Overlays = {
     lines: L.featureGroup().addTo(map),
     stops: L.featureGroup().addTo(map),
     zones: L.featureGroup().addTo(map),
+    hotels: L.featureGroup().addTo(map),
 }
 
 //Layercontrol
@@ -36,6 +37,7 @@ L.control.layers({
     "Vienna sightseeing Linien": Overlays.lines,
     "Vienna sightseeing Haltestellen": Overlays.stops,
     "Fußgängerzonen": Overlays.zones,
+    "Hotels und Unterkünfte": Overlays.hotels
 
 }).addTo(map);
 
