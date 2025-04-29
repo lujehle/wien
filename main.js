@@ -148,18 +148,26 @@ async function loadZones(url) {
     let jsondata = await response.json();
     console.log(jsondata);
     L.geoJSON(jsondata, {
-        attribution: "Datenquelle: <a href='https://data.wien.gv.at' >Stadt Wien </a>",
+        attribution: "Datenquelle: <a href='https://data.wien.gv.at'>Stadt Wien</a>",
         style: function (feature) {
-            //console.log(feature)
             return {
                 color: "#F012BE",
                 weight: 1,
                 opacity: 0.4,
                 fillOpacity: 0.1,
-            }
+            };
+        },
+        onEachFeature: function (feature, layer) {
+            const props = feature.properties;
+            layer.bindPopup(`
+                <strong>Fußgängerzone ${props.ADRESSE}</strong><br>
+                <i class="fa-regular fa-clock"></i> ${props.ZEITRAUM}<br>
+                <i class="fa-solid fa-circle-info"></i> ${props.AUSN_TEXT}
+            `);
         }
     }).addTo(overlays.zones);
 }
+
 
 // Hotels
 async function loadHotels(url) {
