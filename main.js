@@ -119,10 +119,8 @@ async function loadStops(url) {
     let jsondata = await response.json();
     console.log(jsondata);
     L.geoJSON(jsondata, {
-        attribution: "Datenquelle: <a href='https://data.wien.gv.at' >Stadt Wien </a>",
+        attribution: "Datenquelle: <a href='https://data.wien.gv.at'>Stadt Wien</a>",
         pointToLayer: function (feature, latlng) {
-            console.log(feature.properties);
-
             return L.marker(latlng, {
                 icon: L.icon({
                     iconUrl: `icons/bus_${feature.properties.LINE_ID}.png`,
@@ -130,10 +128,17 @@ async function loadStops(url) {
                     popupAnchor: [0, -37]
                 })
             });
+        },
+        onEachFeature: function (feature, layer) {
+            const props = feature.properties;
+            layer.bindPopup(`
+                <strong><i class="fa-solid fa-bus"></i> ${props.LINE_NAME}</strong><br>
+                <i class="fa-solid fa-location-dot"></i> ${props.NAME}
+            `);
         }
-
     }).addTo(overlays.stops);
 }
+
 
 
 // Fußgängerzone
