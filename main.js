@@ -81,37 +81,36 @@ async function loadLines(url) {
     let jsondata = await response.json();
     console.log(jsondata);
     L.geoJSON(jsondata, {
-        attribution: "Datenquelle: <a href='https://data.wien.gv.at' >Stadt Wien </a>",
+        attribution: "Datenquelle: <a href='https://data.wien.gv.at'>Stadt Wien</a>",
         style: function (feature) {
-            //console.log(feature.properties.LINE_NAME);
-
             let lineColor;
-
-            if (feature.properties.LINE_NAME == "Yellow Line") {
-                lineColor = "#FFDC00";
-            } else if (feature.properties.LINE_NAME == "Blue Line") {
-                lineColor = "#0074D9";
-            } else if (feature.properties.LINE_NAME == "Red Line") {
-                lineColor = "#FF4136";
-            } else if (feature.properties.LINE_NAME == "Green Line") {
-                lineColor = "#2ECC40";
-            } else if (feature.properties.LINE_NAME == "Grey Line") {
-                lineColor = "#AAAAAA";
-            } else if (feature.properties.LINE_NAME == "Orange Line") {
-                lineColor = "#FF851B";
-            } else {
-                lineColor = "#111111";
+            switch (feature.properties.LINE_NAME) {
+                case "Yellow Line": lineColor = "#FFDC00"; break;
+                case "Blue Line": lineColor = "#0074D9"; break;
+                case "Red Line": lineColor = "#FF4136"; break;
+                case "Green Line": lineColor = "#2ECC40"; break;
+                case "Grey Line": lineColor = "#AAAAAA"; break;
+                case "Orange Line": lineColor = "#FF851B"; break;
+                default: lineColor = "#111111";
             }
-
             return {
                 color: lineColor,
-                weight: 1,
-                opacity: 0.6,
-                fillOpacity: 0.1,
-            }
+                weight: 2,
+                opacity: 0.7
+            };
+        },
+        onEachFeature: function (feature, layer) {
+            const props = feature.properties;
+            layer.bindPopup(`
+                <strong><i class="fa-solid fa-bus"></i> ${props.LINE_NAME}</strong><br>
+                <i class="fa-regular fa-circle-dot"></i> ${props.FROM_NAME}<br>
+                <i class="fa-solid fa-arrow-down"></i><br>
+                <i class="fa-regular fa-circle-dot"></i> ${props.TO_NAME}
+            `);
         }
     }).addTo(overlays.lines);
 }
+
 
 // Haltstellen
 async function loadStops(url) {
