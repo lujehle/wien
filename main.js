@@ -80,21 +80,31 @@ async function loadLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     console.log(jsondata);
+
     L.geoJSON(jsondata, {
         attribution: "Datenquelle: <a href='https://data.wien.gv.at'>Stadt Wien</a>",
         style: function (feature) {
-            let lineColor;
-            switch (feature.properties.LINE_NAME) {
-                case "Yellow Line": lineColor = "#FFDC00"; break;
-                case "Blue Line": lineColor = "#0074D9"; break;
-                case "Red Line": lineColor = "#FF4136"; break;
-                case "Green Line": lineColor = "#2ECC40"; break;
-                case "Grey Line": lineColor = "#AAAAAA"; break;
-                case "Orange Line": lineColor = "#FF851B"; break;
-                default: lineColor = "#111111";
+            let color;
+            let name = feature.properties.LINE_NAME;
+
+            if (name == "Yellow Line") {
+                color = "#FFDC00";
+            } else if (name == "Blue Line") {
+                color = "#0074D9";
+            } else if (name == "Red Line") {
+                color = "#FF4136";
+            } else if (name == "Green Line") {
+                color = "#2ECC40";
+            } else if (name == "Grey Line") {
+                color = "#AAAAAA";
+            } else if (name == "Orange Line") {
+                color = "#FF851B";
+            } else {
+                color = "#111111"; // Standardfarbe
             }
+
             return {
-                color: lineColor,
+                color: color,
                 weight: 2,
                 opacity: 0.7
             };
@@ -110,6 +120,7 @@ async function loadLines(url) {
         }
     }).addTo(overlays.lines);
 }
+
 
 
 // Haltstellen
@@ -130,10 +141,11 @@ async function loadStops(url) {
             });
         },
         onEachFeature: function (feature, layer) {
+            console.log(feature.properties);
             const props = feature.properties;
             layer.bindPopup(`
                 <strong><i class="fa-solid fa-bus"></i> ${props.LINE_NAME}</strong><br>
-                <i class="fa-solid fa-location-dot"></i> ${props.NAME}
+                <i class="fa-solid fa-location-dot"></i> ${props.STAT_NAME}
             `);
         }
     }).addTo(overlays.stops);
@@ -175,25 +187,26 @@ async function loadHotels(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     console.log(jsondata);
+
     L.geoJSON(jsondata, {
-        attribution: "Datenquelle: <a href='https://data.wien.gv.at' >Stadt Wien </a>",
+        attribution: "Datenquelle: <a href='https://data.wien.gv.at'>Stadt Wien</a>",
         pointToLayer: function (feature, latlng) {
-            console.log(feature.properties.KATEGORIE_TXT);
+            const props = feature.properties;
             let iconName;
-            if (feature.properties.KATEGORIE_TXT == "5*") {
+
+            if (props.KATEGORIE_TXT == "5*") {
                 iconName = "hotel_5stars.png";
-            } else if (feature.properties.KATEGORIE_TXT == "4*") {
+            } else if (props.KATEGORIE_TXT == "4*") {
                 iconName = "hotel_4stars.png";
-            } else if (feature.properties.KATEGORIE_TXT == "3*") {
+            } else if (props.KATEGORIE_TXT == "3*") {
                 iconName = "hotel_3stars.png";
-            } else if (feature.properties.KATEGORIE_TXT == "2*") {
+            } else if (props.KATEGORIE_TXT == "2*") {
                 iconName = "hotel_2stars.png";
-            } else if (feature.properties.KATEGORIE_TXT == "1*") {
+            } else if (props.KATEGORIE_TXT == "1*") {
                 iconName = "hotel_1stars.png";
             } else {
                 iconName = "hotel_0stars.png";
             }
-            //console.log(iconName);
 
             return L.marker(latlng, {
                 icon: L.icon({
@@ -202,9 +215,26 @@ async function loadHotels(url) {
                     popupAnchor: [0, -37]
                 })
             });
+        },
+        onEachFeature: function (feature, layer) {
+            const props = feature.properties;
+            layer.bindPopup(`
+                <div style="min-width:200px">
+                    <strong><i class="fa-solid fa-hotel"></i> ${props.BETRIEB}</strong><br>
+                    Hotel ${props.KATEGORIE_TXT}<br>
+                    <hr style="margin:4px 0">
+                    <i class="fa-solid fa-location-dot"></i> ${props.ADRESSE}<br>
+                    <i class="fa-solid fa-phone"></i> <a href="tel:${props.KONTAKT_TEL}">${props.KONTAKT_TEL}</a><br>
+                    <i class="fa-solid fa-envelope"></i> <a href="mailto:${props.KONTAKT_EMAIL}">${props.KONTAKT_EMAIL}</a><br>
+                    <a href="${props.WEBLINK1}" target="_blank">
+                        <i class="fa-solid fa-globe"></i> Homepage
+                    </a>
+                </div>
+            `);
         }
     }).addTo(overlays.hotels);
 }
+
 // GeoJSON und visualisieren
 loadSights("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json")
 loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json")
